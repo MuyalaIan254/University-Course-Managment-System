@@ -6,18 +6,28 @@ import universitycoursemanagementsystem.Dashboard.AdminDashboard;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
+import com.formdev.flatlaf.FlatDarkLaf;
+
 
 public class Main extends JFrame {
-    CardLayout cardLayout;
-    JPanel cardPanel;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
 
-   
 
     public Main () {
         setTitle("University Course Management System");
-        setSize(400, 500);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        
+        
+        // Set the title icon
+        URL iconURL = getClass().getResource("/Icon/MainIcon.png");
+        if (iconURL != null) {
+            ImageIcon icon = new ImageIcon(iconURL);
+            setIconImage(icon.getImage());
+        }
 
         // Initialize CardLayout and Main Panel
         cardLayout = new CardLayout();
@@ -41,7 +51,15 @@ public class Main extends JFrame {
         cardLayout.show(cardPanel, name);
     }
 
+    
+
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf()); // FlatLightLaf for light mode
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         new Main();  // Run the app
     }
 }

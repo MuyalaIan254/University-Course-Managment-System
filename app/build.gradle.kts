@@ -13,6 +13,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven { setUrl("https://jitpack.io") } 
 }
 
 dependencies {
@@ -23,6 +24,12 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    implementation("com.formdev:flatlaf:3.2")
+
+     implementation("com.jfoenix:jfoenix:9.0.10")
+
+    implementation("com.miglayout:miglayout-swing:5.3")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -41,4 +48,6 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+
 

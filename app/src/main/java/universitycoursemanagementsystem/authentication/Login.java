@@ -13,9 +13,16 @@ public class Login extends JPanel implements ActionListener {
     JLabel userLabel, passLabel;
     JButton logIn, register;
     Main parent;
+    private Image backgroundImage;
+
 
   public Login(Main parent) {
         this.parent = parent;
+
+       
+        backgroundImage = new ImageIcon("app/src/main/java/universitycoursemanagementsystem/images/login.jpg").getImage();
+        
+       
        
         username = new JTextField(15);
         password = new JPasswordField(15);
@@ -23,6 +30,9 @@ public class Login extends JPanel implements ActionListener {
         passLabel = new JLabel("Password");
         logIn = new JButton("Log In");
         register = new JButton("Register");
+       
+
+        
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -47,12 +57,17 @@ public class Login extends JPanel implements ActionListener {
         gbc.gridx = 1;
         add(register, gbc);
 
-        
-
-
-
         logIn.addActionListener(this);
         register.addActionListener(e -> parent.showCard("Register"));
+    }
+
+    
+    
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0,getWidth(),getHeight(), this);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -60,12 +75,11 @@ public class Login extends JPanel implements ActionListener {
         String pass = new String(password.getPassword());
 
         if (user.equals("admin") && pass.equals("admin")) {
-            JOptionPane.showMessageDialog(this, "Log In Successful");
-            // Transition to a main system screen (e.g., dashboard)
+            // Transition to a main system screen 
             parent.showCard("AdminDashboard");
         } else {
             JOptionPane.showMessageDialog(this, "Log In Failed");
         }
     }
 }
-    
+
