@@ -77,6 +77,9 @@ public class Login extends JPanel implements ActionListener {
         if (user.equals("admin") && pass.equals("admin")) {
             // Transition to a main system screen 
             parent.showCard("AdminDashboard");
+        } else if (user.equals("user") && pass.equals("user")) {
+            // Transition to a main system screen
+            parent.showCard("BaseDashboard");
         } else {
             JOptionPane.showMessageDialog(this, "Log In Failed");
         }
