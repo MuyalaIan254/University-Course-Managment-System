@@ -7,6 +7,8 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id("java")
+    id("base")
     application
 }
 
@@ -17,6 +19,8 @@ repositories {
 }
 
 dependencies {
+
+
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
 
@@ -27,9 +31,11 @@ dependencies {
 
     implementation("com.formdev:flatlaf:3.2")
 
-     implementation("com.jfoenix:jfoenix:9.0.10")
+    implementation("com.jfoenix:jfoenix:9.0.10")
 
     implementation("com.miglayout:miglayout-swing:5.3")
+    
+     implementation ("com.formdev:flatlaf-intellij-themes:3.2")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -48,6 +54,11 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+
+
+
+
 
 
 
