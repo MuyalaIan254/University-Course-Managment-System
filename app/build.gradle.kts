@@ -35,7 +35,9 @@ dependencies {
 
     implementation("com.miglayout:miglayout-swing:5.3")
     
-     implementation ("com.formdev:flatlaf-intellij-themes:3.2")
+    implementation ("com.formdev:flatlaf-intellij-themes:3.2")
+    
+    implementation ("org.postgresql:postgresql:42.7.1")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
