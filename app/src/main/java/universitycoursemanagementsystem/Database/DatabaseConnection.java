@@ -12,8 +12,8 @@ public class DatabaseConnection {
 
     static {
         config.setJdbcUrl("jdbc:postgresql://localhost:5432/your_database");
-        config.setUsername("your_username");
-        config.setPassword("your_password");
+        config.setUsername("postgres");
+        config.setPassword("admin");
         config.setMaximumPoolSize(10);  // Max number of connections in the pool
         config.setMinimumIdle(2);        // Minimum number of idle connections
         config.setIdleTimeout(30000);    // Time before idle connections are removed
