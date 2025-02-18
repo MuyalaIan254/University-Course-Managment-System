@@ -1,4 +1,4 @@
-package universitycoursemanagmentsystem.Database;
+package universitycoursemanagementsystem.Database;
 
 import java.sql.*;
 
