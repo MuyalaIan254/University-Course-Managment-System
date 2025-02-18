@@ -1,8 +1,8 @@
-package org.example;
+package universitycoursemanagmentsystem.Database;
 
 import java.sql.*;
 
-public class Main {
+public class DAO {
     private static final String URL = "jdbc:postgresql://localhost:5432/mariadb";
     private static final String USER = "postgres";
     private static final String PASSWORD = "admin";
