@@ -8,10 +8,11 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static final HikariConfig config = new HikariConfig();
+    
     private static final HikariDataSource dataSource;
 
     static {
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/your_database");
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/MariaDB");
         config.setUsername("postgres");
         config.setPassword("admin");
         config.setMaximumPoolSize(10);  // Max number of connections in the pool
