@@ -12,9 +12,9 @@ public class DatabaseConnection {
     private static final HikariDataSource dataSource;
 
     static {
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/MariaDB");
-        config.setUsername("postgres");
-        config.setPassword("admin");
+        config.setJdbcUrl("jdbc:postgresql://46.96.32.5:5432/university_database");
+        config.setUsername("ian-muyala");
+        config.setPassword("BABY_rhine32");
         config.setMaximumPoolSize(10);  // Max number of connections in the pool
         config.setMinimumIdle(2);        // Minimum number of idle connections
         config.setIdleTimeout(30000);    // Time before idle connections are removed
