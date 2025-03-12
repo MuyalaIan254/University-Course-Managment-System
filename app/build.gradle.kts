@@ -44,7 +44,9 @@ dependencies {
 
     implementation ("ch.qos.logback:logback-classic:1.4.14")
 
-    
+    implementation ("org.apache.commons:commons-lang3:3.12.0")
+
+   
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
