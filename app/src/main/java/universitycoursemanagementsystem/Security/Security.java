@@ -9,6 +9,10 @@ import java.util.Base64;
 
 public class Security {
     
+    /**
+     * The passwordHash class provides methods for generating a salt, hashing passwords, 
+     * and verifying passwords using the PBKDF2WithHmacSHA256 algorithm.
+     */
     class passwordHash{
         private static final int ITERATIONS = 65536;
         private static final int KEY_LENGTH = 256;
@@ -37,6 +41,7 @@ public class Security {
                 System.err.println("Exception encountered in hashPassword()");
                 return null;
             } finally {
+                // Clear the password from memory for security reasons
                 spec.clearPassword();
             }
         }
