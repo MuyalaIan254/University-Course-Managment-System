@@ -235,4 +235,34 @@ public class PersonDAO {
             JOptionPane.showMessageDialog(null, "Error updating database: " + e.getMessage());
         }
     }
+
+    public Map<String,Object> totalStudents() {
+        String query = "SELECT COUNT(student_id) AS total_students FROM students WHERE is_active = true";
+        Map<String,Object> totalStudents = new HashMap<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalStudents.put("total_students", rs.getInt("total_students"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalStudents;
+    }
+
+    public Map<String,Object> totalLecturers() {
+        String query = "SELECT COUNT(lecturer_id) AS total_lecturers FROM lecturers WHERE is_active = true";
+        Map<String,Object> totalLecturers = new HashMap<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalLecturers.put("total_lecturers", rs.getInt("total_lecturers"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalLecturers;
+    }
 }

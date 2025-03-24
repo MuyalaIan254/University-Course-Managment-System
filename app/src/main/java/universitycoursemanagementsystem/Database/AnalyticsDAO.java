@@ -143,4 +143,49 @@ public class AnalyticsDAO {
         }
         return model;
     }
+
+    public DefaultTableModel getRecentActivity(){
+        String query ="SELECT activity_type,description,timestamp FROM recent_activity ORDER BY timestamp DESC";
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{"Activity","Description","Timestamp"});
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                model.addRow(new Object[]{rs.getString("activity_type"),rs.getString("description"),rs.getTimestamp("timestamp")});
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return model;
+    }
+
+    public Map<String,Map<String,Double>> avgGradeByCourse_Semester(){
+        String query = "SELECT g.semester_id, c.course_name, AVG(g.course_marks) AS average_marks " +
+        "FROM grades g " +
+        "JOIN units u ON g.unit_id = u.unit_id " +
+        "JOIN courses c ON u.course_id = c.course_id " +
+        "GROUP BY g.semester_id, c.course_name " +
+        "ORDER BY g.semester_id, c.course_name";
+        Map<String,Map<String,Double>> avgGradeByCourse_Semester = new HashMap<>();
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                String semester = "Semester " + rs.getInt("semester_id");
+                String course = rs.getString("course_name");
+                double average = rs.getDouble("average_marks");
+                if(avgGradeByCourse_Semester.containsKey(semester)){
+                    avgGradeByCourse_Semester.get(semester).put(course,average);
+                }else{
+                    Map<String,Double> courseAverage = new HashMap<>();
+                    courseAverage.put(course,average);
+                    avgGradeByCourse_Semester.put(semester,courseAverage);
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return avgGradeByCourse_Semester;
+    }
 }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -61,5 +63,21 @@ public class CoursesDAO {
             e.printStackTrace();
         }
     }
+
+   public Map<String,Object> totalCourses() {
+        String query = "SELECT COUNT(*) FROM courses"; // Ensure table & columns match DB
+        Map<String,Object> totalCourses = new HashMap<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                totalCourses.put("total_courses", rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalCourses;
+   }
     
 }

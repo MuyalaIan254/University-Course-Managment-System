@@ -1,10 +1,13 @@
 package universitycoursemanagementsystem.Components;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.util.Map;
 import org.jfree.chart.ChartFactory;
+import java.awt.Color;
 
 
 
@@ -38,6 +41,36 @@ public class AnalyticUtils {
         
     }
 
-    
+    public static JFreeChart homeBarGraph(Map<String,Map<String,Double>> avgGradeByCourse_Semester) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Map.Entry<String,Map<String,Double>> entry : avgGradeByCourse_Semester.entrySet()){
+            for (Map.Entry<String,Double> entry2 : entry.getValue().entrySet()){
+                dataset.setValue(entry2.getValue(), entry.getKey(), entry2.getKey());
+            }
+        }
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Average Grade by Course and Semester",
+            "Courses",
+            "Average Marks",
+            dataset
+    );
+
+        
+        // Customizing the chart for better visualization
+        CategoryPlot plot = (CategoryPlot) chart.getPlot();
+        plot.setBackgroundPaint(Color.DARK_GRAY);
+        plot.setOutlinePaint(Color.BLACK);
+        plot.setRangeGridlinePaint(Color.WHITE);
+
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, Color.BLUE);
+        renderer.setSeriesPaint(1, Color.RED);
+        renderer.setSeriesPaint(2, Color.GREEN);
+        renderer.setSeriesPaint(3, Color.ORANGE);
+        renderer.setSeriesPaint(4, Color.MAGENTA);
+
+        return chart;
+    }
+
    
 }
