@@ -8,6 +8,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import java.util.Map;
 import org.jfree.chart.ChartFactory;
 import java.awt.Color;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 
@@ -70,6 +71,12 @@ public class AnalyticUtils {
         renderer.setSeriesPaint(4, Color.MAGENTA);
 
         return chart;
+    }
+
+    public static JFreeChart gradeDistributionPieChart(DefaultPieDataset<String>dataset){
+        JFreeChart chart = ChartFactory.createPieChart("Grade Distribution", dataset, true, true, false);
+        return chart;
+      
     }
 
    

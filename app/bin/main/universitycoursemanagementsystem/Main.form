@@ -983,14 +983,12 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
+                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="addStudentButton" min="-2" pref="232" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                                  <Component id="editStudentsButton" min="-2" pref="232" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                                  <Component id="removeStudentsButton" min="-2" pref="232" max="-2" attributes="0"/>
+                                  <Component id="addStudentButton" min="-2" pref="347" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                                  <Component id="editStudentsButton" min="-2" pref="351" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
@@ -1012,7 +1010,6 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="addStudentButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="removeStudentsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="editStudentsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="49" max="32767" attributes="0"/>
@@ -1137,14 +1134,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addStudentButtonActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="removeStudentsButton">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Remove"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeStudentsButtonActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="editStudentsButton">
@@ -1322,25 +1311,55 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                          <Component id="coursesBarGraph1" min="-2" pref="491" max="-2" attributes="0"/>
-                          <EmptySpace pref="1122" max="32767" attributes="0"/>
+                          <Component id="coursesBarGraph1" min="-2" pref="868" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+                          <Component id="gradesPieChart" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="134" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
-                          <Component id="coursesBarGraph1" min="-2" pref="398" max="-2" attributes="0"/>
-                          <EmptySpace pref="548" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="coursesBarGraph1" min="-2" pref="398" max="-2" attributes="0"/>
+                              <Component id="gradesPieChart" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="574" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="coursesBarGraph1">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="cc" green="cc" red="cc" type="rgb"/>
+                    </Property>
+                  </Properties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                </Container>
+                <Container class="javax.swing.JPanel" name="gradesPieChart">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="33" green="cc" red="0" type="rgb"/>
+                    </Property>
+                  </Properties>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="532" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="398" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
                 </Container>
               </SubComponents>
             </Container>
@@ -1393,11 +1412,9 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="addLecturerButton" min="-2" pref="240" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="editLecturerTable" min="-2" pref="240" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="removeLecturerButton" min="-2" pref="240" max="-2" attributes="0"/>
+                                  <Component id="addLecturerButton" min="-2" pref="353" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="editLecturerTable" min="-2" pref="365" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
@@ -1415,7 +1432,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="95" max="32767" attributes="0"/>
+                          <EmptySpace pref="93" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1437,7 +1454,6 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="addLecturerButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="editLecturerTable" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="removeLecturerButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="67" max="32767" attributes="0"/>
                       </Group>
@@ -1559,11 +1575,6 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editLecturerTableActionPerformed"/>
                   </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="removeLecturerButton">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Remove"/>
-                  </Properties>
                 </Component>
               </SubComponents>
             </Container>
