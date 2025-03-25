@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.jfree.data.general.DefaultPieDataset;
+
 public class AnalyticsDAO {
 
     // Fetch average grades by unit
@@ -187,5 +189,20 @@ public class AnalyticsDAO {
             e.printStackTrace();
         }
         return avgGradeByCourse_Semester;
+    }
+
+    public DefaultPieDataset<String> gradeDistribution(){
+        String query ="SELECT grade,COUNT(grade) AS grade_count FROM grades GROUP BY grade";
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                dataset.setValue(rs.getString("grade"),rs.getInt("grade_count"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return dataset;
     }
 }
