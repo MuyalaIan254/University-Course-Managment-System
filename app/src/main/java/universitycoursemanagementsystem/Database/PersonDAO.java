@@ -273,16 +273,18 @@ public class PersonDAO {
     public boolean createUser(String username, String password) {
         String salt = PasswordHash.generateSalt(32);
         String hashedPassword = PasswordHash.hashPassword(password, salt);
-        String query = "INSERT INTO users (username, password, salt) VALUES (?, ?, ?)";
+        String query = "INSERT INTO users (username, password_hash, salt) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, hashedPassword);
             pstmt.setString(3, salt);
             pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "User created successfully!");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error creating user!");
             return false;
         }
     }
@@ -294,7 +296,7 @@ public class PersonDAO {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                String hashedPassword = rs.getString("password");
+                String hashedPassword = rs.getString("password_hash");
                 String salt = rs.getString("salt");
                 return PasswordHash.verifyPassword(password, hashedPassword, salt);
             }

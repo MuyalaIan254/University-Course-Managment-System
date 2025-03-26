@@ -2,12 +2,7 @@
 package universitycoursemanagementsystem.authentication;
 
 import javax.swing.JOptionPane;
-
 import universitycoursemanagementsystem.Database.PersonDAO;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 
 public class LogIn extends javax.swing.JDialog {
 
@@ -27,11 +22,7 @@ public class LogIn extends javax.swing.JDialog {
     }
     
 
-    
-   
-
-    
-    @SuppressWarnings("unchecked")
+   // @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -254,8 +245,8 @@ public class LogIn extends javax.swing.JDialog {
             dispose();
         }else{
             JOptionPane.showMessageDialog(this, "Invalid username or password");
-            password1.setText("");
-            username1.setText("");
+            password1.setText("password");
+            username1.setText("Username");
         }
       }catch(Exception e){
           e.printStackTrace();
