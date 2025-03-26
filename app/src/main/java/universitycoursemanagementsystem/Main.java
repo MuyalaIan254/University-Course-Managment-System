@@ -16,8 +16,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableRowSorter;
-
-import org.checkerframework.checker.units.qual.A;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import java.util.Map;
@@ -1037,12 +1035,12 @@ public class Main extends javax.swing.JFrame {
                 "Student ID", "Coursework Marks", "Final Exam Marks"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[] {
                 java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public Class<?> getColumnClass(int columnIndex) {
+                return types[columnIndex];
             }
         });
         jScrollPane5.setViewportView(gradesInputTable);
