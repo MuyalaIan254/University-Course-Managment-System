@@ -2,15 +2,11 @@ package universitycoursemanagementsystem.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.table.DefaultTableModel;
-
 import org.jfree.data.general.DefaultPieDataset;
 
 public class AnalyticsDAO {
@@ -205,4 +201,6 @@ public class AnalyticsDAO {
         }
         return dataset;
     }
+
+   
 }

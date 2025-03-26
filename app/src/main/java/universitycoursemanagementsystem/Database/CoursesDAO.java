@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.Map;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class CoursesDAO {
@@ -51,16 +52,18 @@ public class CoursesDAO {
         }
     }
 
-    public void addCourse(String courseName, int department) {
-        String query = "INSERT INTO courses (course_name, department) VALUES (?, ?)"; // Ensure table & columns match DB
+    public void addCourse(String courseName,String department) {
+        String query = "INSERT INTO courses (course_name, department) VALUES (?, ?)"; 
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, courseName);
-            pstmt.setInt(2, department);
+            pstmt.setString(2, department);
             pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Course added successfully");
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to add course");
         }
     }
 

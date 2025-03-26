@@ -1,15 +1,32 @@
 
 package universitycoursemanagementsystem.authentication;
 
+import javax.swing.JOptionPane;
+
+import universitycoursemanagementsystem.Database.PersonDAO;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+
 public class LogIn extends javax.swing.JDialog {
+
+    private boolean authenticated = false;
 
     public LogIn(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         setUndecorated(true);
-        setLocationRelativeTo(null);
         initComponents();
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(false);
+    }
+
+    public boolean isAuthenticated() {
+        return authenticated;
     }
     
+
     
    
 
@@ -30,14 +47,11 @@ public class LogIn extends javax.swing.JDialog {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        logInButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setLocation(null);
-        setResizable(false);
+       
 
         Login.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         Login.setInheritsPopupMenu(true);
@@ -109,21 +123,14 @@ public class LogIn extends javax.swing.JDialog {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-password-20.png"))); // NOI18N
 
-        jButton1.setBackground(new java.awt.Color(60, 49, 71));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("sign in");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        logInButton.setBackground(new java.awt.Color(60, 49, 71));
+        logInButton.setForeground(new java.awt.Color(255, 255, 255));
+        logInButton.setText("sign in");
+        logInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                logInButtonActionPerformed(evt);
             }
         });
-
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Forgot password ?");
-
-        jButton3.setBackground(new java.awt.Color(60, 49, 71));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("click here");
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
         jLabel7.setFont(new java.awt.Font("Ubuntu Sans", 3, 24)); // NOI18N
@@ -148,22 +155,20 @@ public class LogIn extends javax.swing.JDialog {
                         .addComponent(jLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(signInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSeparator2)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addComponent(password1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(signInLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3))
-                    .addGroup(signInLayout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(username1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signInLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(15, 15, 15))
+                .addGroup(signInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signInLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(15, 15, 15))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, signInLayout.createSequentialGroup()
+                        .addComponent(logInButton, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69))))
         );
         signInLayout.setVerticalGroup(
             signInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,13 +187,9 @@ public class LogIn extends javax.swing.JDialog {
                     .addComponent(password1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(25, 25, 25)
-                .addGroup(signInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jButton3))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(logInButton)
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         Start.add(signIn, "card2");
@@ -240,33 +241,43 @@ public class LogIn extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_password1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
       String username=username1.getText();
       String password=new String(password1.getPassword());
       
-      if(username.equals("admin")&& password.equals("admin")){
-          
+      try{
+        PersonDAO personDAO=new PersonDAO();
+        personDAO.verifyUser(username, password);
+
+        if(personDAO.verifyUser(username, password)){
+            authenticated=true;
+            dispose();
+        }else{
+            JOptionPane.showMessageDialog(this, "Invalid username or password");
+            password1.setText("");
+            username1.setText("");
+        }
+      }catch(Exception e){
+          e.printStackTrace();
       }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_logInButtonActionPerformed
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-       
+        System.exit(0);
     }//GEN-LAST:event_jLabel7MouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Login;
     private javax.swing.JPanel Start;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton logInButton;
     private javax.swing.JPasswordField password1;
     private javax.swing.JPanel signIn;
     private javax.swing.JTextField username1;

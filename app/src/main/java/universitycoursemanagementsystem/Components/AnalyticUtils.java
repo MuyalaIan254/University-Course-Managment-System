@@ -10,9 +10,6 @@ import org.jfree.chart.ChartFactory;
 import java.awt.Color;
 import org.jfree.data.general.DefaultPieDataset;
 
-
-
-
 public class AnalyticUtils {
     public static JFreeChart barGraph1(Map<String,Integer>studentsPerCourse){
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -79,5 +76,5 @@ public class AnalyticUtils {
       
     }
 
-   
 }
+

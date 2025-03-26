@@ -66,8 +66,10 @@ public class UnitDAO {
             pstmt.setInt(2, courseID);
             pstmt.setBoolean(3, isCommon);
             pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Unit added successfully");
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to add unit");
         }
     }
 
