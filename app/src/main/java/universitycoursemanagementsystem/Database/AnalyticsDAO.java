@@ -6,8 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.XYSeries;
 
 public class AnalyticsDAO {
 
@@ -198,6 +202,23 @@ public class AnalyticsDAO {
             }
         }catch(SQLException e){
             e.printStackTrace();
+        }
+        return dataset;
+    }
+
+    public XYSeriesCollection getAttendancePercentageGradeTrend(){
+        String query ="SELECT g.course_marks, a.attendance_percentage FROM grades g JOIN attendance a ON g.student_id = a.student_id AND g.unit_id = a.unit_id";
+        XYSeries series = new XYSeries("Grades vs Attendance");
+        XYSeriesCollection dataset = new XYSeriesCollection(series);
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                dataset.getSeries(0).add(rs.getDouble("attendance_percentage"),rs.getDouble("course_marks"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching data");
         }
         return dataset;
     }

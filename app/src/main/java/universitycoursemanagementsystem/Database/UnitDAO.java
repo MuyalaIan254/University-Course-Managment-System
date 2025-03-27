@@ -33,9 +33,9 @@ public class UnitDAO {
     }
 
     public DefaultTableModel getUnitsByCourse(int courseID) {
-        String query = "SELECT unit_id,unit_name FROM units WHERE course_id = ?"; // Ensure table & columns match DB
+        String query = "SELECT unit_id,unit_name FROM units WHERE course_id = ?"; 
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"ID", "Name"}); // JTable headers
+        model.setColumnIdentifiers(new String[]{"ID", "Name"}); 
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -58,7 +58,7 @@ public class UnitDAO {
    
 
     public void addUnit(String unitName, int courseID, boolean isCommon) {
-        String query = "INSERT INTO units (unit_name, course_id, is_common) VALUES (?, ?, ?)"; // Ensure table & columns match DB
+        String query = "INSERT INTO units (unit_name, course_id, is_common) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -74,7 +74,7 @@ public class UnitDAO {
     }
 
     public Map<String,Object> totalUnits() {
-        String query = "SELECT COUNT(*) FROM units"; // Ensure table & columns match DB
+        String query = "SELECT COUNT(*) FROM units"; 
         Map<String,Object> totalUnits = new HashMap<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -87,6 +87,20 @@ public class UnitDAO {
             e.printStackTrace();
         }
         return totalUnits;
+    }
+
+    public void deleteUnit(int unitID){
+        String query = "DELETE FROM units WHERE unit_id = ?"; 
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, unitID);
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Unit deleted successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to delete unit");
+        }
     }
     
 }

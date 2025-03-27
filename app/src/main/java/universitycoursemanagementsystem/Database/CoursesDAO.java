@@ -82,5 +82,19 @@ public class CoursesDAO {
         }
         return totalCourses;
    }
+
+   public void deleteCourse(int courseID){
+        String query = "DELETE FROM courses WHERE course_id = ?"; // Ensure table & columns match DB
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, courseID);
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Course deleted successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to delete course");
+        }
+   }
     
 }

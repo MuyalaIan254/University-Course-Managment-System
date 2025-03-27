@@ -9,6 +9,7 @@ import java.util.Map;
 import org.jfree.chart.ChartFactory;
 import java.awt.Color;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeriesCollection;
 
 public class AnalyticUtils {
     public static JFreeChart barGraph1(Map<String,Integer>studentsPerCourse){
@@ -74,6 +75,12 @@ public class AnalyticUtils {
         JFreeChart chart = ChartFactory.createPieChart("Grade Distribution", dataset, true, true, false);
         return chart;
       
+    }
+
+    public static JFreeChart getAttendancePercentageGradeTrend(XYSeriesCollection dataset){
+        JFreeChart chart = ChartFactory.createXYLineChart("Attendance Percentage Grade Trend", "Attendance Percentage", "Grade", dataset);
+        return chart;
+       
     }
 
 }

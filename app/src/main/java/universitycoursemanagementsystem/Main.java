@@ -15,8 +15,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.table.TableRowSorter;
-import org.checkerframework.checker.units.qual.h;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import java.util.Map;
@@ -29,7 +29,6 @@ import universitycoursemanagementsystem.Database.AnalyticsDAO;
 import universitycoursemanagementsystem.Dialoges.AddPersonDialogue;
 import universitycoursemanagementsystem.Dialoges.AddUnitDialogue;
 import universitycoursemanagementsystem.Dialoges.AddCourseDialogue;
-import universitycoursemanagementsystem.Database.CoursesDAO;
 import universitycoursemanagementsystem.Database.UnitDAO;
 import universitycoursemanagementsystem.Dialoges.StudentsProfileDialog;
 import universitycoursemanagementsystem.Database.GradeDAO;
@@ -37,8 +36,12 @@ import universitycoursemanagementsystem.authentication.LogIn;
 import universitycoursemanagementsystem.Dialoges.SettingsDialogue;
 
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.Dimension;
+
+import universitycoursemanagementsystem.Database.CoursesDAO;
 
 public class Main extends javax.swing.JFrame {
     private boolean initialized = false;
@@ -47,15 +50,10 @@ public class Main extends javax.swing.JFrame {
        if (!initialized) {
             initComponents();
             cardLayout = (CardLayout) contentPanel.getLayout();
-            loadStudentData();
-            loadLecturerData();
-            loadEnrollmentBarGraph();
-            loadCoursesData();
-            loadUnitsIntoComboBox();
             displayCountdata();
             displayRecentActivity();
             loadHomeBarGraph();
-            loadGradesPieChart();
+            loadAttendanceGradeTrend();
             initialized = true;
         }
         setVisible(false);
@@ -222,6 +220,57 @@ public class Main extends javax.swing.JFrame {
         
     }
 
+    public void loadAttendanceGradeTrend(){
+            SwingWorker<XYDataset, Void> worker = new SwingWorker<>() {
+            @Override
+            protected XYDataset doInBackground() throws Exception {
+                AnalyticsDAO analyticsDAO = new AnalyticsDAO();
+                return analyticsDAO.getAttendancePercentageGradeTrend(); // Fetch dataset in background
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    XYDataset dataset = get();
+                    if(dataset != null){
+                        attendanceGradePlane.removeAll();
+                        attendanceGradePlane.revalidate();
+                        attendanceGradePlane.repaint();
+
+                        JFreeChart chart = AnalyticUtils.getAttendancePercentageGradeTrend((XYSeriesCollection) dataset);
+                        ChartPanel chartPanel = new ChartPanel(chart);
+                        chartPanel.setPreferredSize(new java.awt.Dimension(1486,471));
+
+                        attendanceGradePlane.setLayout(new MigLayout());
+                        attendanceGradePlane.add(chartPanel, "dock center");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } 
+            }
+        };
+        worker.execute();
+
+    }
+
+    private void loadGradesTable(){
+        GradeDAO gradeDAO = new GradeDAO();
+        DefaultTableModel model = gradeDAO.getGradeByStudentAndUnit();
+        gradesTable.setModel(model);
+    }
+
+    private void loadAvgCourseGradeTable(){
+        GradeDAO gradeDAO = new GradeDAO();
+        DefaultTableModel model = gradeDAO.getAvgCourseGrade();
+        avgCourseGradeTable.setModel(model);
+    }
+
+    private void filterGradesTable(String searchTerm){
+        TableRowSorter<DefaultTableModel> rowSorter = new TableRowSorter<>((DefaultTableModel) gradesTable.getModel());
+        gradesTable.setRowSorter(rowSorter);
+        rowSorter.setRowFilter(RowFilter.regexFilter(searchTerm));
+    }
+
    
     /*End of major class functions
      * Any additional functions should be added there
@@ -285,9 +334,9 @@ public class Main extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         unitsTable = new javax.swing.JTable();
         addCourseButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        deleteCourse = new javax.swing.JButton();
         addUnitButton = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        removeUnitButton = new javax.swing.JButton();
         studentsPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         studentsTable = new javax.swing.JTable();
@@ -304,11 +353,18 @@ public class Main extends javax.swing.JFrame {
         submitButton = new javax.swing.JButton();
         unitsComboBox = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        gradesTable = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        avgCourseGradeTable = new javax.swing.JTable();
+        editGradeTable = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        gradesSearch = new javax.swing.JTextField();
+        jSeparator10 = new javax.swing.JSeparator();
         analyticsPanel = new javax.swing.JPanel();
         coursesBarGraph1 = new javax.swing.JPanel();
         gradesPieChart = new javax.swing.JPanel();
         attendanceGradePlane = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
         lecturerPanel = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         lecturerTable = new javax.swing.JTable();
@@ -754,7 +810,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(53, 53, 53)
                 .addComponent(homeBarGraphPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         contentPanel.add(homePanel, "homeContent");
@@ -840,10 +896,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Delete Course");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        deleteCourse.setText("Delete Course");
+        deleteCourse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jButton2ActionPerformed(evt);
+                deleteCourseActionPerformed(evt);
             }
         });
 
@@ -854,10 +910,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Remove  Unit");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        removeUnitButton.setText("Remove  Unit");
+        removeUnitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jButton5ActionPerformed(evt);
+                removeUnitButtonActionPerformed(evt);
             }
         });
 
@@ -873,7 +929,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, coursesPanelLayout.createSequentialGroup()
                         .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(deleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(77, 77, 77)
                 .addGroup(coursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -881,7 +937,7 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(coursesPanelLayout.createSequentialGroup()
                             .addComponent(addUnitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(48, 48, 48)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(removeUnitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 721, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(212, Short.MAX_VALUE))
         );
@@ -899,13 +955,13 @@ public class Main extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addGroup(coursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addCourseButton)
-                            .addComponent(jButton2)))
+                            .addComponent(deleteCourse)))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(coursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addUnitButton)
-                    .addComponent(jButton5))
-                .addContainerGap(217, Short.MAX_VALUE))
+                    .addComponent(removeUnitButton))
+                .addContainerGap(238, Short.MAX_VALUE))
         );
 
         contentPanel.add(coursesPanel, "coursesContent");
@@ -1016,7 +1072,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(studentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addStudentButton)
                     .addComponent(editStudentsButton))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         contentPanel.add(studentsPanel, "studentsContent");
@@ -1149,21 +1205,189 @@ public class Main extends javax.swing.JFrame {
                 .addGap(10, 10, 10))
         );
 
+        gradesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Student ID", "Unit ID", "Course Marks", "Grade"
+            }
+        ));
+        jScrollPane7.setViewportView(gradesTable);
+
+        avgCourseGradeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Unit Name", "Mark", "Grade"
+            }
+        ));
+        jScrollPane8.setViewportView(avgCourseGradeTable);
+
+        editGradeTable.setText("Edit");
+        editGradeTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editGradeTableActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-search-25.png"))); // NOI18N
+
+        gradesSearch.setBackground(new java.awt.Color(60, 63, 65));
+        gradesSearch.setText("Settings");
+        gradesSearch.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        gradesSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                gradesSearchFocusGained(evt);
+            }
+        });
+        gradesSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                gradesSearchKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout gradesPanelLayout = new javax.swing.GroupLayout(gradesPanel);
         gradesPanel.setLayout(gradesPanelLayout);
         gradesPanelLayout.setHorizontalGroup(
             gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gradesPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1072, Short.MAX_VALUE))
+                .addGroup(gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(gradesPanelLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(gradesSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, gradesPanelLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(gradesPanelLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane8))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(gradesPanelLayout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 834, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gradesPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(editGradeTable, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(gradesPanelLayout.createSequentialGroup()
+                                .addGap(593, 593, 593)
+                                .addComponent(jSeparator10)))))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
         gradesPanelLayout.setVerticalGroup(
             gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gradesPanelLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(418, Short.MAX_VALUE))
+                .addGroup(gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(gradesPanelLayout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(gradesPanelLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(gradesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21)
+                            .addComponent(gradesSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 860, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(editGradeTable)))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         contentPanel.add(gradesPanel, "gradesContent");
@@ -1190,24 +1414,11 @@ public class Main extends javax.swing.JFrame {
         attendanceGradePlane.setLayout(attendanceGradePlaneLayout);
         attendanceGradePlaneLayout.setHorizontalGroup(
             attendanceGradePlaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 887, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         attendanceGradePlaneLayout.setVerticalGroup(
             attendanceGradePlaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 471, Short.MAX_VALUE)
-        );
-
-        jPanel7.setBackground(new java.awt.Color(0, 102, 102));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout analyticsPanelLayout = new javax.swing.GroupLayout(analyticsPanel);
@@ -1216,11 +1427,8 @@ public class Main extends javax.swing.JFrame {
             analyticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(analyticsPanelLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addGroup(analyticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(analyticsPanelLayout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(50, 50, 50)
-                        .addComponent(attendanceGradePlane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(analyticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(attendanceGradePlane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(analyticsPanelLayout.createSequentialGroup()
                         .addComponent(coursesBarGraph1, javax.swing.GroupLayout.PREFERRED_SIZE, 868, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(67, 67, 67)
@@ -1234,11 +1442,9 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(analyticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(coursesBarGraph1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                     .addComponent(gradesPieChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(74, 74, 74)
-                .addGroup(analyticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(attendanceGradePlane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addComponent(attendanceGradePlane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         contentPanel.add(analyticsPanel, "analyticsContent");
@@ -1339,7 +1545,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(lecturerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addLecturerButton)
                     .addComponent(editLecturerTable))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         contentPanel.add(lecturerPanel, "lecturerContent");
@@ -1366,21 +1572,27 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void coursesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_coursesButtonMouseClicked
-         cardLayout.show(contentPanel,"coursesContent");       
+         cardLayout.show(contentPanel,"coursesContent");   
+         loadCoursesData();
     }//GEN-LAST:event_coursesButtonMouseClicked
 
     private void studentsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentsButtonMouseClicked
         cardLayout.show(contentPanel, "studentsContent");
+        loadStudentData();
        
     }//GEN-LAST:event_studentsButtonMouseClicked
 
     private void gradesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradesButtonMouseClicked
         cardLayout.show(contentPanel, "gradesContent");
+        loadGradesTable();
+        loadAvgCourseGradeTable();
+        loadUnitsIntoComboBox();
     }//GEN-LAST:event_gradesButtonMouseClicked
 
     private void analyticsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_analyticsButtonMouseClicked
        cardLayout.show(contentPanel, "analyticsContent");
-        
+       loadEnrollmentBarGraph();
+       loadGradesPieChart();
     }//GEN-LAST:event_analyticsButtonMouseClicked
 
     private void search1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_search1FocusGained
@@ -1402,6 +1614,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
        cardLayout.show(contentPanel, "lecturerContent");
+       loadLecturerData();
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void coursesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_coursesTableMouseClicked
@@ -1523,6 +1736,14 @@ public class Main extends javax.swing.JFrame {
         settingsDialogue.toFront();
     }//GEN-LAST:event_settingsButtonMouseClicked
 
+    private void gradesSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_gradesSearchFocusGained
+        gradesSearch.setText("");
+    }//GEN-LAST:event_gradesSearchFocusGained
+
+    private void editGradeTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editGradeTableActionPerformed
+        
+    }//GEN-LAST:event_editGradeTableActionPerformed
+
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {                                       
         this.dispose();
         LogIn logIn = new LogIn(null, true);
@@ -1530,7 +1751,30 @@ public class Main extends javax.swing.JFrame {
         
     } 
     
+    private void deleteCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseActionPerformed
+        int row = coursesTable.getSelectedRow();
+        int courseID = (int) coursesTable.getValueAt(row, 0);
+        CoursesDAO courseDAO = new CoursesDAO();
+        courseDAO.deleteCourse(courseID);
+        DefaultTableModel model = courseDAO.getAllCourses();
+        coursesTable.setModel(model);
+    }//GEN-LAST:event_deleteCourseActionPerformed
     
+    private void removeUnitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeUnitButtonActionPerformed
+        int row = unitsTable.getSelectedRow();
+        int unitID = (int) unitsTable.getValueAt(row, 0);
+        UnitDAO unitDAO = new UnitDAO();
+        unitDAO.deleteUnit(unitID);
+        DefaultTableModel model = unitDAO.getUnitsByCourse(unitID);
+        unitsTable.setModel(model);
+    }//GEN-LAST:event_removeUnitButtonActionPerformed
+
+    private void gradesSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gradesSearchKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            String searchTerm = gradesSearch.getText().trim();
+            filterGradesTable(searchTerm);
+        }
+    }//GEN-LAST:event_gradesSearchKeyPressed
 
    
     public static void main(String args[]) {
@@ -1539,13 +1783,8 @@ public class Main extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
-        SwingUtilities.invokeLater(()->{
-            Main main = new Main();
-            main.setVisible(true);
-        });
         
-        /*SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             Main main = new Main();
             
             LogIn logIn = new LogIn(null, true);
@@ -1557,7 +1796,7 @@ public class Main extends javax.swing.JFrame {
             } else {
                 System.exit(0);
             }
-        });*/
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1570,23 +1809,26 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel analyticsButton;
     private javax.swing.JPanel analyticsPanel;
     private javax.swing.JPanel attendanceGradePlane;
+    private javax.swing.JTable avgCourseGradeTable;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel coursesBarGraph1;
     private javax.swing.JLabel coursesButton;
     private javax.swing.JLabel coursesCount;
     private javax.swing.JPanel coursesPanel;
     private javax.swing.JTable coursesTable;
+    private javax.swing.JButton deleteCourse;
+    private javax.swing.JButton editGradeTable;
     private javax.swing.JButton editLecturerTable;
     private javax.swing.JButton editStudentsButton;
     private javax.swing.JLabel gradesButton;
     private javax.swing.JTable gradesInputTable;
     private javax.swing.JPanel gradesPanel;
     private javax.swing.JPanel gradesPieChart;
+    private javax.swing.JTextField gradesSearch;
+    private javax.swing.JTable gradesTable;
     private javax.swing.JPanel homeBarGraphPanel;
     private javax.swing.JLabel homeButton;
     private javax.swing.JPanel homePanel;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1600,6 +1842,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel26;
@@ -1615,14 +1858,16 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -1636,6 +1881,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTable lecturerTable;
     private javax.swing.JLabel lecturersCount;
     private javax.swing.JTable recentActivityTable;
+    private javax.swing.JButton removeUnitButton;
     private javax.swing.JTextField search1;
     private javax.swing.JTextField search2;
     private javax.swing.JLabel settingsButton;
