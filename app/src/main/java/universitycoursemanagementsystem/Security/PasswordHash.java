@@ -7,13 +7,12 @@ import java.util.Base64;
 
 
 
-public class Security {
-    
+
     /**
      * The passwordHash class provides methods for generating a salt, hashing passwords, 
      * and verifying passwords using the PBKDF2WithHmacSHA256 algorithm.
      */
-    class passwordHash{
+    public  class PasswordHash{
         private static final int ITERATIONS = 65536;
         private static final int KEY_LENGTH = 256;
         private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
@@ -56,4 +55,4 @@ public class Security {
     }
 
 
-}
+

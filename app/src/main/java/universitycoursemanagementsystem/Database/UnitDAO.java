@@ -66,9 +66,27 @@ public class UnitDAO {
             pstmt.setInt(2, courseID);
             pstmt.setBoolean(3, isCommon);
             pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Unit added successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed to add unit");
+        }
+    }
+
+    public Map<String,Object> totalUnits() {
+        String query = "SELECT COUNT(*) FROM units"; // Ensure table & columns match DB
+        Map<String,Object> totalUnits = new HashMap<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                totalUnits.put("total_units", rs.getInt(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return totalUnits;
     }
     
 }

@@ -7,9 +7,11 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.Map;
 import java.util.HashMap;
-
+import universitycoursemanagementsystem.Security.PasswordHash;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import universitycoursemanagementsystem.Model.Student;
+import universitycoursemanagementsystem.Model.Instructor;
 
 
 
@@ -70,17 +72,17 @@ public class PersonDAO {
         return model;
     }
 
-    public boolean addStudent(String firstName, String lastName, String email, String phoneNumber, String address, int courseId) {
+    public boolean addStudent(Student student) {
         String query = "INSERT INTO students (first_name, last_name, email, phone_number, address, course_id)\n" + //
                         "VALUES (?, ?, ?, ?, ?, ?);";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, firstName);
-            pstmt.setString(2, lastName);
-            pstmt.setString(3, email);
-            pstmt.setString(4, phoneNumber);
-            pstmt.setString(5, address);
-            pstmt.setInt(6, courseId);
+            pstmt.setString(1, student.getFirstName());
+            pstmt.setString(2, student.getLastName());
+            pstmt.setString(3, student.getEmail());
+            pstmt.setString(4, student.getPhoneNumber());
+            pstmt.setString(5, student.getAddress());
+            pstmt.setInt(6, student.getCourseId());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -90,7 +92,7 @@ public class PersonDAO {
        
     }
 
-    public boolean addLecturer(String firstName, String lastName, String email, String phoneNumber, String address, int courseId) {
+    public boolean addLecturer(Instructor instructor, int courseId) {
         String query = "INSERT INTO lecturers(first_name, last_name, email, phone_number, address) VALUES(?,?,?,?,?) RETURNING lecturer_id";
         String query1 = "INSERT INTO lecturer_courses(lecturer_id, course_id) VALUES(?,?)";
     
@@ -100,11 +102,13 @@ public class PersonDAO {
     
             conn.setAutoCommit(false);  // Start transaction
     
-            pstmt.setString(1, firstName);
-            pstmt.setString(2, lastName);
-            pstmt.setString(3, email);
-            pstmt.setString(4, phoneNumber);
-            pstmt.setString(5, address);
+            // Insert lecturer
+            pstmt.setString(1, instructor.getFirstName());
+            pstmt.setString(2, instructor.getLastName());
+            pstmt.setString(3, instructor.getEmail());
+            pstmt.setString(4, instructor.getPhoneNumber());
+            pstmt.setString(5, instructor.getAddress());
+
             
     
             ResultSet rs = pstmt.executeQuery();
@@ -234,5 +238,94 @@ public class PersonDAO {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error updating database: " + e.getMessage());
         }
+    }
+
+    public Map<String,Object> totalStudents() {
+        String query = "SELECT COUNT(student_id) AS total_students FROM students WHERE is_active = true";
+        Map<String,Object> totalStudents = new HashMap<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalStudents.put("total_students", rs.getInt("total_students"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalStudents;
+    }
+
+    public Map<String,Object> totalLecturers() {
+        String query = "SELECT COUNT(lecturer_id) AS total_lecturers FROM lecturers WHERE is_active = true";
+        Map<String,Object> totalLecturers = new HashMap<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                totalLecturers.put("total_lecturers", rs.getInt("total_lecturers"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalLecturers;
+    }
+
+    public boolean createUser(String username, String password) {
+        String salt = PasswordHash.generateSalt(32);
+        String hashedPassword = PasswordHash.hashPassword(password, salt);
+        String query = "INSERT INTO users (username, password_hash, salt) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, hashedPassword);
+            pstmt.setString(3, salt);
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "User created successfully!");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error creating user!");
+            return false;
+        }
+    }
+
+    public boolean verifyUser(String username, String password) {
+        String query = "SELECT password_hash, salt FROM users WHERE username = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password_hash");
+                String salt = rs.getString("salt");
+                return PasswordHash.verifyPassword(password, hashedPassword, salt);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        if (verifyUser(username, oldPassword)) {
+            String salt = PasswordHash.generateSalt(32);
+            String hashedPassword = PasswordHash.hashPassword(newPassword, salt);
+            String query = "UPDATE users SET password_hash = ?, salt = ? WHERE username = ?";
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, hashedPassword);
+                pstmt.setString(2, salt);
+                pstmt.setString(3, username);
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Password changed successfully!");
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error changing password!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid username or password!");
+        }
+        return false;
     }
 }

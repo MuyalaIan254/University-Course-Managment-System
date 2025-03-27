@@ -4,6 +4,8 @@ package universitycoursemanagementsystem.Dialoges;
 import javax.swing.JOptionPane;
 
 import universitycoursemanagementsystem.Database.PersonDAO;
+import universitycoursemanagementsystem.Model.Student; 
+import universitycoursemanagementsystem.Model.Instructor;
 
 
 
@@ -60,51 +62,24 @@ public class AddPersonDialogue extends javax.swing.JDialog {
 
         sFName.setBackground(new java.awt.Color(60, 63, 65));
         sFName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sFName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sFNameActionPerformed(evt);
-            }
-        });
-
+       
         sLName.setBackground(new java.awt.Color(60, 63, 65));
         sLName.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sLName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sLNameActionPerformed(evt);
-            }
-        });
-
+        
         sEmail.setBackground(new java.awt.Color(60, 63, 65));
         sEmail.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sEmailActionPerformed(evt);
-            }
-        });
-
+       
         sPhone.setBackground(new java.awt.Color(60, 63, 65));
         sPhone.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sPhone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sPhoneActionPerformed(evt);
-            }
-        });
+          
 
         sAddress.setBackground(new java.awt.Color(60, 63, 65));
         sAddress.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sAddress.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sAddressActionPerformed(evt);
-            }
-        });
+        
 
         sCourseId.setBackground(new java.awt.Color(60, 63, 65));
         sCourseId.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        sCourseId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sCourseIdActionPerformed(evt);
-            }
-        });
+        
 
         personTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Lecturer" }));
 
@@ -215,35 +190,10 @@ public class AddPersonDialogue extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void sFNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sFNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sFNameActionPerformed
-
-    private void sLNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sLNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sLNameActionPerformed
-
-    private void sEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sEmailActionPerformed
-
-    private void sPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sPhoneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sPhoneActionPerformed
-
-    private void sAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sAddressActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sAddressActionPerformed
-
-    private void sCourseIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sCourseIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sCourseIdActionPerformed
+    }
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-       PersonDAO personDAO = new PersonDAO(); 
-
+    
        String firstName = sFName.getText();
        String lastName = sLName.getText(); 
        String email = sEmail.getText();
@@ -260,23 +210,27 @@ public class AddPersonDialogue extends javax.swing.JDialog {
     try {
        
         int courseId = Integer.parseInt(courseIdStr);
-
+        PersonDAO personDao = new PersonDAO();
         boolean success;
-        if ("Student".equals(personType)) {
-            success = personDAO.addStudent(firstName, lastName, email, phoneStr, address, courseId);
-        } else {
-            success = personDAO.addLecturer(firstName, lastName, email, phoneStr, address, courseId); // Assuming isActive is true by default
+
+        if("Student".equals(personType)){
+            Student student = new Student(firstName, lastName, email, phoneStr, address, courseId);
+            success = personDao.addStudent(student);
+        }else{
+           
+            Instructor instructor = new Instructor(firstName, lastName, email, phoneStr, address);
+            success = personDao.addLecturer(instructor,courseId);
         }
 
         if (success) {
-            JOptionPane.showMessageDialog(this, personType + " added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Person added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to add " + personType, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error adding person", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Invalid phone number or course id", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid course id", "Error", JOptionPane.ERROR_MESSAGE);
+        }
        
         
             

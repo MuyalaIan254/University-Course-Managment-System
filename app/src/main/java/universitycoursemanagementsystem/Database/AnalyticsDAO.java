@@ -2,14 +2,12 @@ package universitycoursemanagementsystem.Database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.swing.table.DefaultTableModel;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class AnalyticsDAO {
 
@@ -143,4 +141,66 @@ public class AnalyticsDAO {
         }
         return model;
     }
+
+    public DefaultTableModel getRecentActivity(){
+        String query ="SELECT activity_type,description,timestamp FROM recent_activity ORDER BY timestamp DESC";
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{"Activity","Description","Timestamp"});
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                model.addRow(new Object[]{rs.getString("activity_type"),rs.getString("description"),rs.getTimestamp("timestamp")});
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return model;
+    }
+
+    public Map<String,Map<String,Double>> avgGradeByCourse_Semester(){
+        String query = "SELECT g.semester_id, c.course_name, AVG(g.course_marks) AS average_marks " +
+        "FROM grades g " +
+        "JOIN units u ON g.unit_id = u.unit_id " +
+        "JOIN courses c ON u.course_id = c.course_id " +
+        "GROUP BY g.semester_id, c.course_name " +
+        "ORDER BY g.semester_id, c.course_name";
+        Map<String,Map<String,Double>> avgGradeByCourse_Semester = new HashMap<>();
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                String semester = "Semester " + rs.getInt("semester_id");
+                String course = rs.getString("course_name");
+                double average = rs.getDouble("average_marks");
+                if(avgGradeByCourse_Semester.containsKey(semester)){
+                    avgGradeByCourse_Semester.get(semester).put(course,average);
+                }else{
+                    Map<String,Double> courseAverage = new HashMap<>();
+                    courseAverage.put(course,average);
+                    avgGradeByCourse_Semester.put(semester,courseAverage);
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return avgGradeByCourse_Semester;
+    }
+
+    public DefaultPieDataset<String> gradeDistribution(){
+        String query ="SELECT grade,COUNT(grade) AS grade_count FROM grades GROUP BY grade";
+        DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
+        try(Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()){
+            while(rs.next()){
+                dataset.setValue(rs.getString("grade"),rs.getInt("grade_count"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return dataset;
+    }
+
+   
 }
