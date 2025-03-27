@@ -16,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableRowSorter;
-
 import org.checkerframework.checker.units.qual.h;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -35,8 +34,7 @@ import universitycoursemanagementsystem.Database.UnitDAO;
 import universitycoursemanagementsystem.Dialoges.StudentsProfileDialog;
 import universitycoursemanagementsystem.Database.GradeDAO;
 import universitycoursemanagementsystem.authentication.LogIn;
-import universitycoursemanagementsystem.Dialoges.AddUserDialogue;
-
+import universitycoursemanagementsystem.Dialoges.SettingsDialogue;
 
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -319,8 +317,6 @@ public class Main extends javax.swing.JFrame {
         jSeparator11 = new javax.swing.JSeparator();
         addLecturerButton = new javax.swing.JButton();
         editLecturerTable = new javax.swing.JButton();
-        settingsPanel = new javax.swing.JPanel();
-        addUserButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Maven University");
@@ -380,6 +376,11 @@ public class Main extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-log-out-30.png"))); // NOI18N
 
         jLabel9.setText("Log Out");
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Ubuntu Sans", 3, 24)); // NOI18N
         jLabel5.setText("Maven");
@@ -427,25 +428,6 @@ public class Main extends javax.swing.JFrame {
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(studentsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(sidebarLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2)
-                            .addComponent(jSeparator1)
-                            .addGroup(sidebarLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(coursesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(sidebarLayout.createSequentialGroup()
-                                        .addGap(0, 6, Short.MAX_VALUE)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(homeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,21 +449,40 @@ public class Main extends javax.swing.JFrame {
                                     .addComponent(jLabel16)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(settingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(sidebarLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator2)
+                            .addComponent(jSeparator1)
+                            .addGroup(sidebarLayout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(coursesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidebarLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(sidebarLayout.createSequentialGroup()
+                                        .addGap(0, 6, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(homeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         sidebarLayout.setVerticalGroup(
             sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidebarLayout.createSequentialGroup()
                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(sidebarLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, sidebarLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(sidebarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)))
                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(homeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
@@ -842,7 +843,7 @@ public class Main extends javax.swing.JFrame {
         jButton2.setText("Delete Course");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                //jButton2ActionPerformed(evt);
             }
         });
 
@@ -856,7 +857,7 @@ public class Main extends javax.swing.JFrame {
         jButton5.setText("Remove  Unit");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                //jButton5ActionPerformed(evt);
             }
         });
 
@@ -1087,12 +1088,12 @@ public class Main extends javax.swing.JFrame {
                 "Student ID", "Coursework Marks", "Final Exam Marks"
             }
         ) {
-            Class[] types = new Class [] {
+            Class<?>[] types = new Class<?>[] {
                 java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public Class<?> getColumnClass(int columnIndex) {
+                return types[columnIndex];
             }
         });
         jScrollPane5.setViewportView(gradesInputTable);
@@ -1343,33 +1344,6 @@ public class Main extends javax.swing.JFrame {
 
         contentPanel.add(lecturerPanel, "lecturerContent");
 
-        addUserButton.setFont(new java.awt.Font("Liberation Sans", 1, 30)); // NOI18N
-        addUserButton.setText("ADD  USER");
-        addUserButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addUserButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout settingsPanelLayout = new javax.swing.GroupLayout(settingsPanel);
-        settingsPanel.setLayout(settingsPanelLayout);
-        settingsPanelLayout.setHorizontalGroup(
-            settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(settingsPanelLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(addUserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1181, Short.MAX_VALUE))
-        );
-        settingsPanelLayout.setVerticalGroup(
-            settingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(settingsPanelLayout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addComponent(addUserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(787, Short.MAX_VALUE))
-        );
-
-        contentPanel.add(settingsPanel, "settingsContent");
-
         javax.swing.GroupLayout adminDashboardLayout = new javax.swing.GroupLayout(adminDashboard);
         adminDashboard.setLayout(adminDashboardLayout);
         adminDashboardLayout.setHorizontalGroup(
@@ -1447,19 +1421,11 @@ public class Main extends javax.swing.JFrame {
         addCourseDialogue.toFront();
     }//GEN-LAST:event_addCourseButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void addUnitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUnitButtonActionPerformed
         AddUnitDialogue addUnitDialogue = new AddUnitDialogue(this, true);
         addUnitDialogue.setVisible(true);
         addUnitDialogue.toFront();
     }//GEN-LAST:event_addUnitButtonActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void studentsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentsTableMouseClicked
         if(evt.getClickCount()==2){
@@ -1551,15 +1517,20 @@ public class Main extends javax.swing.JFrame {
         cardLayout.show(contentPanel,"homeContent");
     }//GEN-LAST:event_homeButtonMouseClicked
 
-    private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
-        AddUserDialogue addUserDialogue = new AddUserDialogue(this, true);
-        addUserDialogue.setVisible(true);
-        addUserDialogue.toFront();
-    }//GEN-LAST:event_addUserButtonActionPerformed
-
     private void settingsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingsButtonMouseClicked
-        cardLayout.show(contentPanel, "settingsContent");
+        SettingsDialogue settingsDialogue = new SettingsDialogue(this, true);
+        settingsDialogue.setVisible(true);
+        settingsDialogue.toFront();
     }//GEN-LAST:event_settingsButtonMouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {                                       
+        this.dispose();
+        LogIn logIn = new LogIn(null, true);
+        logIn.setVisible(true);
+        
+    } 
+    
+    
 
    
     public static void main(String args[]) {
@@ -1569,9 +1540,12 @@ public class Main extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
+        SwingUtilities.invokeLater(()->{
+            Main main = new Main();
+            main.setVisible(true);
+        });
         
-        
-        SwingUtilities.invokeLater(() -> {
+        /*SwingUtilities.invokeLater(() -> {
             Main main = new Main();
             
             LogIn logIn = new LogIn(null, true);
@@ -1583,7 +1557,7 @@ public class Main extends javax.swing.JFrame {
             } else {
                 System.exit(0);
             }
-        });
+        });*/
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1592,7 +1566,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton addLecturerButton;
     private javax.swing.JButton addStudentButton;
     private javax.swing.JButton addUnitButton;
-    private javax.swing.JButton addUserButton;
     private javax.swing.JPanel adminDashboard;
     private javax.swing.JLabel analyticsButton;
     private javax.swing.JPanel analyticsPanel;
@@ -1666,7 +1639,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField search1;
     private javax.swing.JTextField search2;
     private javax.swing.JLabel settingsButton;
-    private javax.swing.JPanel settingsPanel;
     private javax.swing.JPanel sidebar;
     private javax.swing.JLabel studentsButton;
     private javax.swing.JLabel studentsCount;

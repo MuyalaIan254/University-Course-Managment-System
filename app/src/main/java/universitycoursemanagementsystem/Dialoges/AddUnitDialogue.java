@@ -34,11 +34,7 @@ public class AddUnitDialogue extends javax.swing.JDialog {
         unitNameTextField.setBackground(new java.awt.Color(60, 63, 65));
         unitNameTextField.setToolTipText("");
         unitNameTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        unitNameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                unitNameTextFieldActionPerformed(evt);
-            }
-        });
+        
 
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
         jLabel2.setText("Course ID               :");
@@ -115,9 +111,7 @@ public class AddUnitDialogue extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void unitNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitNameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_unitNameTextFieldActionPerformed
+    
 
     private void addUnitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUnitButtonActionPerformed
         String unitName = unitNameTextField.getText();

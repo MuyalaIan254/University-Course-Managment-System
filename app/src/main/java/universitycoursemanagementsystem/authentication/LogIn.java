@@ -104,11 +104,7 @@ public class LogIn extends javax.swing.JDialog {
                 password1FocusGained(evt);
             }
         });
-        password1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                password1ActionPerformed(evt);
-            }
-        });
+       
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icons8-male-user-20.png"))); // NOI18N
 
@@ -228,9 +224,7 @@ public class LogIn extends javax.swing.JDialog {
         password1.setText("");
     }//GEN-LAST:event_password1FocusGained
 
-    private void password1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_password1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_password1ActionPerformed
+   
 
     private void logInButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInButtonActionPerformed
       String username=username1.getText();

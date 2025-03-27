@@ -305,4 +305,27 @@ public class PersonDAO {
         }
         return false;
     }
+
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        if (verifyUser(username, oldPassword)) {
+            String salt = PasswordHash.generateSalt(32);
+            String hashedPassword = PasswordHash.hashPassword(newPassword, salt);
+            String query = "UPDATE users SET password_hash = ?, salt = ? WHERE username = ?";
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, hashedPassword);
+                pstmt.setString(2, salt);
+                pstmt.setString(3, username);
+                pstmt.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Password changed successfully!");
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error changing password!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid username or password!");
+        }
+        return false;
+    }
 }

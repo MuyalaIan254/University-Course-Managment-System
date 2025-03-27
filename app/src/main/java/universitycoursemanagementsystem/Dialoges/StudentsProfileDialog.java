@@ -93,11 +93,7 @@ public class StudentsProfileDialog extends javax.swing.JDialog {
         nameField.setBackground(new java.awt.Color(60, 63, 65));
         nameField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         nameField.setEditable(false);
-        nameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameFieldActionPerformed(evt);
-            }
-        });
+       
 
         jLabel3.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel3.setText("Email        :");
@@ -105,20 +101,12 @@ public class StudentsProfileDialog extends javax.swing.JDialog {
         emailField.setBackground(new java.awt.Color(60, 63, 65));
         emailField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         emailField.setEditable(false);
-        emailField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailFieldActionPerformed(evt);
-            }
-        });
+       
 
         phoneField.setBackground(new java.awt.Color(60, 63, 65));
         phoneField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         phoneField.setEditable(false);
-        phoneField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phoneFieldActionPerformed(evt);
-            }
-        });
+        
 
         jLabel4.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
         jLabel4.setText("Phone No :");
@@ -129,11 +117,7 @@ public class StudentsProfileDialog extends javax.swing.JDialog {
         courseField.setBackground(new java.awt.Color(60, 63, 65));
         courseField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         courseField.setEditable(false);
-        courseField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                courseFieldActionPerformed(evt);
-            }
-        });
+        
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -235,31 +219,10 @@ public class StudentsProfileDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nameFieldActionPerformed
+   
 
-    private void emailFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_emailFieldActionPerformed
-
-    private void phoneFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_phoneFieldActionPerformed
-
-    private void courseFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courseFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_courseFieldActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+       public static void main(String args[]) {
+       
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

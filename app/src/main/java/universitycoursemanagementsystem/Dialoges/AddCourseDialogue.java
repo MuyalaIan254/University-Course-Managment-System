@@ -40,11 +40,7 @@ public class AddCourseDialogue extends javax.swing.JDialog {
 
         departmentNameTextField.setBackground(new java.awt.Color(60, 63, 65));
         departmentNameTextField.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        departmentNameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                departmentNameTextFieldActionPerformed(evt);
-            }
-        });
+        
 
         addCourseButton.setText("Add");
         addCourseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -99,9 +95,7 @@ public class AddCourseDialogue extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void departmentNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentNameTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_departmentNameTextFieldActionPerformed
+    
 
     private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButtonActionPerformed
         String courseName = courseNameTextField.getText();
