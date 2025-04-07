@@ -187,7 +187,8 @@ public class PersonDAO {
             JOptionPane.showMessageDialog(null, "Error updating database!");
         }
     }
-
+    
+   
     public void updateDataFromLecturerTable(DefaultTableModel model) {
         String query = "UPDATE lecturers SET first_name = ?, last_name = ?, email = ?, phone_number = ?, address = ?, is_active = ? WHERE lecturer_id = ?";
     
@@ -239,7 +240,6 @@ public class PersonDAO {
             JOptionPane.showMessageDialog(null, "Error updating database: " + e.getMessage());
         }
     }
-
     public Map<String,Object> totalStudents() {
         String query = "SELECT COUNT(student_id) AS total_students FROM students WHERE is_active = true";
         Map<String,Object> totalStudents = new HashMap<>();

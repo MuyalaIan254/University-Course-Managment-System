@@ -51,7 +51,6 @@ public class Main extends javax.swing.JFrame {
             initComponents();
             cardLayout = (CardLayout) contentPanel.getLayout();
             displayCountdata();
-            displayRecentActivity();
             loadHomeBarGraph();
             loadAttendanceGradeTrend();
             initialized = true;
@@ -104,26 +103,26 @@ public class Main extends javax.swing.JFrame {
         coursesTable.setModel(model); // Set table model
     }
 
-   private void loadUnitsIntoComboBox() {
-    UnitDAO unitDAO = new UnitDAO();
-    Map<Integer, String> units = unitDAO.getAllUnits();
-    List<String> unitNames = new ArrayList<>(units.values());
+    private void loadUnitsIntoComboBox() {
+        UnitDAO unitDAO = new UnitDAO();
+        Map<Integer, String> units = unitDAO.getAllUnits();
+        List<String> unitNames = new ArrayList<>(units.values());
 
-    // Set the combo box model with all unit names
-    DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(unitNames.toArray(new String[0]));
-    unitsComboBox.setModel(model);
-    unitsComboBox.setEditable(true);
+        // Set the combo box model with all unit names
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(unitNames.toArray(new String[0]));
+        unitsComboBox.setModel(model);
+        unitsComboBox.setEditable(true);
 
-    // Add a KeyListener to the combo box's editor component
-    JTextField editor = (JTextField) unitsComboBox.getEditor().getEditorComponent();
-    editor.addKeyListener(new KeyAdapter() {
-        @Override
-        public void keyReleased(KeyEvent e) {
-            String text = editor.getText().toLowerCase();
-            filterComboBoxItems(text, unitNames);
-        }
-    });
-}
+        // Add a KeyListener to the combo box's editor component
+        JTextField editor = (JTextField) unitsComboBox.getEditor().getEditorComponent();
+        editor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = editor.getText().toLowerCase();
+                filterComboBoxItems(text, unitNames);
+            }
+        });
+    }
 
     private void filterComboBoxItems(String searchText, List<String> allItems) {
     DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -176,12 +175,7 @@ public class Main extends javax.swing.JFrame {
         
     }
 
-    private void displayRecentActivity(){
-        AnalyticsDAO analyticsDAO = new AnalyticsDAO();
-        DefaultTableModel model = analyticsDAO.getRecentActivity();
-        recentActivityTable.setModel(model);
-    }
-
+   
     private void loadHomeBarGraph(){
         
         homeBarGraphPanel.removeAll();
@@ -323,8 +317,6 @@ public class Main extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         UnitsCount = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        recentActivityTable = new javax.swing.JTable();
         homeBarGraphPanel = new javax.swing.JPanel();
         coursesPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -719,38 +711,6 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        recentActivityTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Activity", "Description", "Timestamp"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane6.setViewportView(recentActivityTable);
-
         homeBarGraphPanel.setBackground(new java.awt.Color(102, 102, 0));
 
         javax.swing.GroupLayout homeBarGraphPanelLayout = new javax.swing.GroupLayout(homeBarGraphPanel);
@@ -776,7 +736,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 17, Short.MAX_VALUE)
                         .addComponent(homeBarGraphPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(homePanelLayout.createSequentialGroup()
                         .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -788,8 +748,7 @@ public class Main extends javax.swing.JFrame {
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(82, 82, 82))
         );
         homePanelLayout.setVerticalGroup(
@@ -798,16 +757,13 @@ public class Main extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(homePanelLayout.createSequentialGroup()
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(45, 45, 45)
-                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addComponent(homeBarGraphPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(96, Short.MAX_VALUE))
@@ -1144,12 +1100,14 @@ public class Main extends javax.swing.JFrame {
                 "Student ID", "Coursework Marks", "Final Exam Marks"
             }
         ) {
-            Class<?>[] types = new Class<?>[] {
+            @SuppressWarnings("rawtypes")
+            Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
-            public Class<?> getColumnClass(int columnIndex) {
-                return types[columnIndex];
+            @SuppressWarnings("rawtypes")
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
             }
         });
         jScrollPane5.setViewportView(gradesInputTable);
@@ -1863,7 +1821,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSeparator jSeparator1;
@@ -1880,7 +1837,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel lecturerPanel;
     private javax.swing.JTable lecturerTable;
     private javax.swing.JLabel lecturersCount;
-    private javax.swing.JTable recentActivityTable;
     private javax.swing.JButton removeUnitButton;
     private javax.swing.JTextField search1;
     private javax.swing.JTextField search2;

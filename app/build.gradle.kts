@@ -51,6 +51,14 @@ dependencies {
    
 }
 
+
+tasks.named<Jar>("jar") {
+    manifest {
+        attributes("Main-Class" to "universitycoursemanagementsystem.Main")
+    }
+}
+
+
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {

@@ -28,30 +28,8 @@ public class GradeDAO {
         }
     }
 
-    public void getGradeByStudent(int studentID) {
-        String query = "SELECT student_id,unit_id,course_marks FROM grades WHERE student_id = ?"; // Ensure table & columns match DB
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, studentID);
-            pstmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getGradeByUnit(int unitID) {
-        String query = "SELECT student_id,unit_id,course_marks FROM grades WHERE unit_id = ?"; // Ensure table & columns match DB
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, unitID);
-            pstmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public int currentSemesterId(){
         String query ="SELECT semester_id FROM semesters WHERE ? BETWEEN start_date AND end_date";
         int semesterId = -1;

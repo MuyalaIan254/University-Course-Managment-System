@@ -27,7 +27,7 @@ public class AnalyticsDAO {
                 unitAverages.put(rs.getInt("unit_id"), rs.getDouble("average"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return unitAverages;
     }
@@ -44,7 +44,7 @@ public class AnalyticsDAO {
                 studentAverages.put(rs.getInt("student_id"), rs.getDouble("average"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return studentAverages;
     }
@@ -63,7 +63,7 @@ public class AnalyticsDAO {
                 studentAverages.put(key, rs.getDouble("average"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return studentAverages;
     }
@@ -80,7 +80,7 @@ public class AnalyticsDAO {
                 studentsPerCourse.put(rs.getString("course_name"), rs.getInt("student_count"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return studentsPerCourse;
     }
@@ -99,7 +99,7 @@ public class AnalyticsDAO {
                 studentAverages.put(key, rs.getDouble("average"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return studentAverages;
     }
@@ -116,7 +116,7 @@ public class AnalyticsDAO {
                 studentAverages.put("Unit " + rs.getInt("unit_id"), rs.getDouble("average"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace(); 
         }
         return studentAverages;
     }
@@ -147,14 +147,14 @@ public class AnalyticsDAO {
     }
 
     public DefaultTableModel getRecentActivity(){
-        String query ="SELECT activity_type,description,timestamp FROM recent_activity ORDER BY timestamp DESC";
+        String query="SELECT action_type,table_name,changed_at FROM logs";
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new Object[]{"Activity","Description","Timestamp"});
+        model.setColumnIdentifiers(new Object[]{"Action Type","Table Name","Changed At"});
         try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery()){
             while(rs.next()){
-                model.addRow(new Object[]{rs.getString("activity_type"),rs.getString("description"),rs.getTimestamp("timestamp")});
+                model.addRow(new Object[]{rs.getString("action_type"),rs.getString("table_name"),rs.getTimestamp("changed_at")});
             }
         }catch(SQLException e){
             e.printStackTrace();

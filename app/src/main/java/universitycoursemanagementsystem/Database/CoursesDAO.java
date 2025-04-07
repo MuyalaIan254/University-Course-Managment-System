@@ -13,9 +13,9 @@ import javax.swing.table.DefaultTableModel;
 
 public class CoursesDAO {
     public DefaultTableModel getAllCourses() {
-        String query = "SELECT course_id,course_name,department FROM courses"; // Ensure table & columns match DB
+        String query = "SELECT course_id,course_name,department FROM courses"; 
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[]{"ID", "Name","Department Name"}); // JTable headers
+        model.setColumnIdentifiers(new String[]{"ID", "Name","Department Name"}); 
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
@@ -35,23 +35,7 @@ public class CoursesDAO {
         return model;
     }
 
-    public void getCourseById(int id) {
-        String query = "SELECT course_id,course_name,department FROM courses WHERE course_id = ?"; // Ensure table & columns match DB
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                System.out.println("Course ID: " + rs.getInt("course_id"));
-                System.out.println("Course Name: " + rs.getString("course_name"));
-                System.out.println("Department: " + rs.getInt("department"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public void addCourse(String courseName,String department) {
         String query = "INSERT INTO courses (course_name, department) VALUES (?, ?)"; 
 
